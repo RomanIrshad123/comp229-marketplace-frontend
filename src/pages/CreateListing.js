@@ -23,7 +23,7 @@ function CreateListing() {
 
   const handleCreate = async () => {
     try {
-      await API.post("/products", {
+      await API.post("/api/products", {
         productname,
         price,
         catergory,
