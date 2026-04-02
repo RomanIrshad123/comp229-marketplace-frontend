@@ -11,7 +11,7 @@ function Marketplace() {
 
   const fetchProducts = async () => {
     try {
-      const res = await API.get("/products");
+      const res = await API.get("/api/products");
       setProducts(res.data);
     } catch (err) {
       console.log(err.response?.data || err.message);

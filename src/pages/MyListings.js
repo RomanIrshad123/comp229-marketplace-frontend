@@ -15,7 +15,7 @@ function MyListings() {
 
   const fetchProducts = async () => {
   try {
-    const res = await API.get("/products/my");
+    const res = await API.get("/api/products/my");
     setProducts(res.data);
   } catch (err) {
     console.log(err.response?.data || err.message);
