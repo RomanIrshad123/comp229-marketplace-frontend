@@ -51,7 +51,7 @@ function MyListings() {
 
   const saveEdit = async (id) => {
     try {
-      await API.put(`/products/${id}`, {
+      await API.put(`/api/products/${id}`, {
         productname: editProductname,
         price: editPrice,
         catergory: editCatergory,
@@ -69,7 +69,7 @@ function MyListings() {
 
   const deleteProduct = async (id) => {
     try {
-      await API.delete(`/products/${id}`);
+      await API.delete(`/api/products/${id}`);
       alert("Listing deleted");
       fetchProducts();
     } catch (err) {
