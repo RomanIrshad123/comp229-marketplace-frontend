@@ -9,7 +9,7 @@ function Register() {
 
   const handleRegister = async () => {
     try {
-      const res = await API.post("/auth/signup", { email, password });
+      const res = await API.post("/api/auth/signup", { email, password });
       alert(res.data.message || "Registered successfully");
       navigate("/");
     } catch (err) {
