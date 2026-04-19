@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
 
+// Marketplace shows all products to the user
 function Marketplace() {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
@@ -9,6 +10,7 @@ function Marketplace() {
     fetchProducts();
   }, []);
 
+  // Get all products from backend
   const fetchProducts = async () => {
     try {
       const res = await API.get("/api/products");
@@ -18,6 +20,12 @@ function Marketplace() {
     }
   };
 
+  // Buy button function
+  const handleBuy = (product) => {
+    window.location.href = `mailto:seller@example.com?subject=Buying ${product.productname}`;
+  };
+
+  // Search products
   const filteredProducts = products.filter((p) => {
     const name = p.productname?.toLowerCase() || "";
     const catergory = p.catergory?.toLowerCase() || "";
@@ -30,6 +38,7 @@ function Marketplace() {
     <div>
       <h2 style={{ marginLeft: "20px" }}>Marketplace</h2>
 
+      {/* Search bar */}
       <div style={{ padding: "0 20px 20px 20px" }}>
         <input
           type="text"
@@ -47,11 +56,11 @@ function Marketplace() {
 
       <div
         style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 280px))",
-        gap: "20px",
-        padding: "20px",
-        marginTop: "10px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 280px))",
+          gap: "20px",
+          padding: "20px",
+          marginTop: "10px",
         }}
       >
         {filteredProducts.map((p) => (
@@ -98,12 +107,31 @@ function Marketplace() {
             )}
 
             <h3 style={{ marginBottom: "10px" }}>{p.productname}</h3>
+
             <p style={{ margin: "6px 0" }}>
               <strong>Price:</strong> ${p.price}
             </p>
-            <p style={{ margin: "6px 0" }}>
+
+            <p style={{ margin: "6px 0 14px 0" }}>
               <strong>Category:</strong> {p.catergory}
             </p>
+
+            <button
+              onClick={() => handleBuy(p)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "none",
+                borderRadius: "10px",
+                background: "#2563eb",
+                color: "white",
+                fontWeight: "bold",
+                cursor: "pointer",
+                fontSize: "15px",
+              }}
+            >
+              Buy Now
+            </button>
           </div>
         ))}
       </div>

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
 
+// Shows only the logged-in user's listings
 function MyListings() {
   const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
+
   const [editProductname, setEditProductname] = useState("");
   const [editPrice, setEditPrice] = useState("");
   const [editCatergory, setEditCatergory] = useState("");
@@ -14,13 +16,13 @@ function MyListings() {
   }, []);
 
   const fetchProducts = async () => {
-  try {
-    const res = await API.get("/api/products/my");
-    setProducts(res.data);
-  } catch (err) {
-    console.log(err.response?.data || err.message);
-  }
-};
+    try {
+      const res = await API.get("/api/products/my");
+      setProducts(res.data);
+    } catch (err) {
+      console.log(err.response?.data || err.message);
+    }
+  };
 
   const startEdit = (product) => {
     setEditingId(product._id);
@@ -78,57 +80,79 @@ function MyListings() {
     }
   };
 
+  const inputStyle = {
+    width: "100%",
+    padding: "10px 12px",
+    marginBottom: "10px",
+    borderRadius: "10px",
+    border: "1px solid #d1d5db",
+    fontSize: "14px",
+    boxSizing: "border-box",
+    outline: "none",
+  };
+
+  const buttonStyle = {
+    flex: 1,
+    padding: "10px 14px",
+    border: "none",
+    borderRadius: "10px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    fontSize: "14px",
+  };
+
   return (
-    <div>
-      <h2 style={{ marginLeft: "20px" }}>My Listings</h2>
+    <div style={{ padding: "20px" }}>
+      <h2 style={{ marginBottom: "20px", fontSize: "30px" }}>My Listings</h2>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 280px))",
-          gap: "20px",
-          padding: "20px",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: "24px",
         }}
       >
         {products.map((p) => (
           <div
             key={p._id}
             style={{
-              background: "white",
+              background: "#fff",
               borderRadius: "18px",
-              padding: "18px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-              border: "1px solid #ddd",
-              width: "250px",
+              overflow: "hidden",
+              boxShadow: "0 4px 14px rgba(0,0,0,0.12)",
+              border: "1px solid #e5e7eb",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
             {editingId === p._id ? (
-              <>
+              <div style={{ padding: "16px" }}>
                 {editImage ? (
                   <img
                     src={editImage}
                     alt="Preview"
                     style={{
                       width: "100%",
-                      aspectRatio: "1 / 1",
+                      height: "220px",
                       objectFit: "cover",
                       borderRadius: "14px",
                       marginBottom: "14px",
+                      display: "block",
                     }}
                   />
                 ) : (
                   <div
                     style={{
                       width: "100%",
-                      aspectRatio: "1 / 1",
+                      height: "220px",
                       borderRadius: "14px",
                       background: "#e5e7eb",
                       marginBottom: "14px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "#6b7280",
-                      fontWeight: "600",
+                      color: "#666",
+                      fontWeight: "bold",
                     }}
                   >
                     No Image
@@ -139,69 +163,37 @@ function MyListings() {
                   value={editProductname}
                   onChange={(e) => setEditProductname(e.target.value)}
                   placeholder="Product name"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                    boxSizing: "border-box",
-                  }}
+                  style={inputStyle}
                 />
 
                 <input
                   value={editPrice}
                   onChange={(e) => setEditPrice(e.target.value)}
                   placeholder="Price"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                    boxSizing: "border-box",
-                  }}
+                  style={inputStyle}
                 />
 
                 <input
                   value={editCatergory}
                   onChange={(e) => setEditCatergory(e.target.value)}
                   placeholder="Category"
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "10px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                    boxSizing: "border-box",
-                  }}
+                  style={inputStyle}
                 />
 
                 <input
                   type="file"
                   accept="image/*"
                   onChange={handleEditImageUpload}
-                  style={{
-                    width: "100%",
-                    padding: "10px",
-                    marginBottom: "12px",
-                    borderRadius: "10px",
-                    border: "1px solid #ccc",
-                    background: "#f9fafb",
-                    boxSizing: "border-box",
-                  }}
+                  style={{ marginBottom: "14px" }}
                 />
 
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: "10px" }}>
                   <button
                     onClick={() => saveEdit(p._id)}
                     style={{
-                      background: "#1877f2",
+                      ...buttonStyle,
+                      background: "#16a34a",
                       color: "white",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
                     }}
                   >
                     Save
@@ -210,17 +202,15 @@ function MyListings() {
                   <button
                     onClick={cancelEdit}
                     style={{
-                      background: "#ddd",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
+                      ...buttonStyle,
+                      background: "#6b7280",
+                      color: "white",
                     }}
                   >
                     Cancel
                   </button>
                 </div>
-              </>
+              </div>
             ) : (
               <>
                 {p.image ? (
@@ -229,67 +219,82 @@ function MyListings() {
                     alt={p.productname}
                     style={{
                       width: "100%",
-                      aspectRatio: "1 / 1",
+                      height: "220px",
                       objectFit: "cover",
-                      borderRadius: "14px",
-                      marginBottom: "14px",
+                      display: "block",
                     }}
                   />
                 ) : (
                   <div
                     style={{
                       width: "100%",
-                      aspectRatio: "1 / 1",
-                      borderRadius: "14px",
+                      height: "220px",
                       background: "#e5e7eb",
-                      marginBottom: "14px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      color: "#6b7280",
-                      fontWeight: "600",
+                      color: "#666",
+                      fontWeight: "bold",
                     }}
                   >
                     No Image
                   </div>
                 )}
 
-                <h3 style={{ marginBottom: "10px" }}>{p.productname}</h3>
-                <p style={{ margin: "6px 0" }}>
-                  <strong>Price:</strong> ${p.price}
-                </p>
-                <p style={{ margin: "6px 0 14px 0" }}>
-                  <strong>Category:</strong> {p.catergory}
-                </p>
-
-                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                  <button
-                    onClick={() => startEdit(p)}
+                <div style={{ padding: "16px" }}>
+                  <h3
                     style={{
-                      background: "#1877f2",
-                      color: "white",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
+                      margin: "0 0 10px 0",
+                      fontSize: "22px",
+                      fontWeight: "bold",
                     }}
                   >
-                    Edit
-                  </button>
+                    {p.productname}
+                  </h3>
 
-                  <button
-                    onClick={() => deleteProduct(p._id)}
+                  <p
                     style={{
-                      background: "#e53935",
-                      color: "white",
-                      border: "none",
-                      padding: "10px 14px",
-                      borderRadius: "10px",
-                      cursor: "pointer",
+                      margin: "0 0 8px 0",
+                      fontSize: "18px",
+                      fontWeight: "600",
                     }}
                   >
-                    Delete
-                  </button>
+                    Price: ${p.price}
+                  </p>
+
+                  <p
+                    style={{
+                      margin: "0 0 16px 0",
+                      color: "#555",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Category: {p.catergory}
+                  </p>
+
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      onClick={() => startEdit(p)}
+                      style={{
+                        ...buttonStyle,
+                        background: "#2563eb",
+                        color: "white",
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteProduct(p._id)}
+                      style={{
+                        ...buttonStyle,
+                        background: "#dc2626",
+                        color: "white",
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </>
             )}

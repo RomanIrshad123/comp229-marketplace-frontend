@@ -1,15 +1,23 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+// Navbar component for the top menu bar
 function Navbar() {
+  // Get the saved token from localStorage
+  // If token exists, user is logged in
   const token = localStorage.getItem("token");
+
   const navigate = useNavigate();
 
+  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
+
+    // Send user back to login page
     navigate("/");
   };
 
+  // Style for navigation links
   const linkStyle = {
     textDecoration: "none",
     background: "#1eea46",
@@ -24,46 +32,52 @@ function Navbar() {
     <nav
       style={{
         display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
+        justifyContent: "space-between", 
+        alignItems: "center", 
         padding: "16px 28px",
         background: "black",
         boxShadow: "0 2px 10px rgba(0, 0, 0, 0.15)",
       }}
     >
+   {/* Left side of navbar */}
       <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-  <img
-    src="/logo.png"
-    alt="TradeSphere Logo"
-    style={{
-      width: "60px",
-      height: "60px",
-      objectFit: "contain",
-      display: "block",
-      background: "white",
-      borderRadius: "12px",
-      padding: "4px",
-    }}
-  />
-  <h2
-    style={{
-      color: "#1eea46",
-      margin: 0,
-      fontSize: "24px",
-      fontWeight: "800",
-    }}
-  >
-    TradeSphere
-  </h2>
-</div>
+        <img
+          src="/logo.png"
+          alt="TradeSphere Logo"
+          style={{
+            width: "60px",
+            height: "60px",
+            objectFit: "contain", 
+            display: "block",
+            background: "white",
+            borderRadius: "12px",
+            padding: "4px",
+          }}
+        />
 
+        <h2
+          style={{
+            color: "#1eea46",
+            margin: 0,
+            fontSize: "24px",
+            fontWeight: "800",
+          }}
+        >
+          TradeSphere
+        </h2>
+      </div>
+
+   {/* page links */}
       <div style={{ display: "flex", gap: "12px" }}>
+        {/* Home link always shows */}
         <Link to="/marketplace" style={linkStyle}>Home</Link>
 
+      {/* If user is logged in, show sell, my listings, and logout */}
         {token ? (
           <>
             <Link to="/create" style={linkStyle}>Sell</Link>
             <Link to="/my" style={linkStyle}>My Listings</Link>
+
             <button
               onClick={logout}
               style={{
@@ -81,6 +95,7 @@ function Navbar() {
           </>
         ) : (
           <>
+     {/* If user is not logged in, show login and register */}
             <Link to="/" style={linkStyle}>Login</Link>
             <Link to="/register" style={linkStyle}>Register</Link>
           </>
@@ -90,4 +105,5 @@ function Navbar() {
   );
 }
 
+// Export Navbar so it can be used in other files
 export default Navbar;
